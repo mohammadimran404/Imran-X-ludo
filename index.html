@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Imran X Ludo — Enter Password</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+</head>
+<body>
+  <!-- Glow Orbs -->
+  <div class="glow-orb glow-orb-1"></div>
+  <div class="glow-orb glow-orb-2"></div>
+  <div class="glow-orb glow-orb-3"></div>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="loader-ring"></div>
+    <span style="font-family:'Orbitron',monospace;font-size:0.7rem;letter-spacing:3px;color:rgba(255,215,0,0.5);text-transform:uppercase;">Loading…</span>
+  </div>
+
+  <div class="page" style="min-height:100vh;">
+    <div class="container animate-scale-in">
+
+      <!-- Logo Header -->
+      <div class="page-header logo-reveal">
+        <span class="crown-icon">👑</span>
+        <h1 class="logo-title">Imran X Ludo</h1>
+        <p class="logo-subtitle">Premium Edition</p>
+      </div>
+
+      <!-- Login Card -->
+      <div class="glass-card glass-card--gold" id="login-card" style="padding:32px 24px;">
+
+        <div style="text-align:center;margin-bottom:24px;">
+          <div style="font-size:2.5rem;margin-bottom:10px;filter:drop-shadow(0 0 12px rgba(255,215,0,0.5));">🔐</div>
+          <h2 style="font-family:'Cinzel Decorative',serif;font-size:1.1rem;font-weight:700;color:var(--gold);margin-bottom:6px;">Access Required</h2>
+          <p style="color:var(--text-muted);font-size:0.85rem;line-height:1.5;">Enter your secret password to<br>enter the Ludo arena</p>
+        </div>
+
+        <hr class="neon-divider">
+
+        <!-- Lockout Banner -->
+        <div id="lockout-banner" class="lockout-banner hidden mb-16">
+          <div style="font-size:0.8rem;color:rgba(255,107,107,0.7);margin-bottom:4px;letter-spacing:1px;text-transform:uppercase;font-family:'Orbitron',monospace;">Too many attempts</div>
+          <div>Wait <span id="lockout-timer" style="font-size:1.5rem;font-weight:700;color:#FF3B3B;">0s</span> before retrying</div>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form">
+          <div class="section-label mb-8">Password</div>
+
+          <div style="position:relative;margin-bottom:16px;">
+            <input
+              type="password"
+              id="password-input"
+              class="input-field"
+              placeholder="Enter secret password…"
+              autocomplete="off"
+              spellcheck="false"
+              style="padding-right:48px;"
+            >
+            <button
+              id="toggle-password"
+              type="button"
+              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;padding:4px;opacity:0.6;transition:opacity 0.2s;"
+              title="Toggle visibility"
+            >👁</button>
+          </div>
+
+          <!-- Error Message -->
+          <div id="login-error" class="msg-error hidden mb-16" style="display:none;">
+            <span>⚠️</span>
+            <span id="login-error-text">Wrong password.</span>
+          </div>
+
+          <button
+            id="login-submit"
+            class="btn btn-gold btn-full"
+            style="font-size:1.05rem;padding:16px;"
+            type="button"
+          >
+            Enter Arena ⚡
+          </button>
+        </div>
+
+        <hr class="neon-divider" style="margin:20px 0 16px;">
+
+        <div style="display:flex;justify-content:center;gap:20px;">
+          <a href="terms.html" style="color:var(--text-muted);font-size:0.78rem;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Terms & Conditions</a>
+          <span style="color:rgba(255,255,255,0.15);">·</span>
+          <a href="contact.html" style="color:var(--text-muted);font-size:0.78rem;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Contact Us</a>
+        </div>
+      </div>
+
+      <!-- Version -->
+      <p style="text-align:center;margin-top:20px;font-size:0.7rem;color:rgba(255,255,255,0.15);font-family:'Orbitron',monospace;letter-spacing:2px;">v1.0.0 · Imran X Edition</p>
+    </div>
+  </div>
+
+  <!-- Floating particles -->
+  <script>
+    const PARTICLE_CHARS = ['♟','⚀','⚁','⚂','⚃','⚄','⚅','★','◆'];
+    for (let i = 0; i < 12; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = PARTICLE_CHARS[Math.floor(Math.random() * PARTICLE_CHARS.length)];
+      p.style.cssText = `
+        left:${Math.random()*100}%;
+        animation-duration:${8+Math.random()*12}s;
+        animation-delay:${-Math.random()*15}s;
+        font-size:${0.8+Math.random()*0.6}rem;
+        color:rgba(255,215,0,${0.05+Math.random()*0.12});
+      `;
+      document.body.appendChild(p);
+    }
+  </script>
+
+  <script src="auth.js"></script>
+  <script>
+    // Remove preloader
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+          preloader.style.opacity = '0';
+          setTimeout(() => preloader.remove(), 500);
+        }
+      }, 600);
+    });
+
+    // Init password screen
+    document.addEventListener('DOMContentLoaded', () => {
+      initPasswordScreen();
+    });
+
+    // Make error text update
+    const origError = document.getElementById('login-error');
+    if (origError) {
+      const textSpan = document.getElementById('login-error-text');
+      const observer = new MutationObserver(() => {
+        const el = document.getElementById('login-error');
+        if (el && textSpan) textSpan.textContent = el.textContent;
+      });
+    }
+  </script>
+
+  <style>
+    /* Override error element to use text span */
+    #login-error { cursor: default; }
+    #login-error::before { content: none; }
+  </style>
+  <script>
+    // Fix: make error div display the message text directly
+    const _origShowError = window.showError;
+  </script>
+</body>
+</html>

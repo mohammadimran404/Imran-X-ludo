@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Imran X Ludo — Setup</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+</head>
+<body>
+  <div class="glow-orb glow-orb-1"></div>
+  <div class="glow-orb glow-orb-2"></div>
+
+  <header class="top-bar">
+    <a href="menu.html" class="icon-btn" style="text-decoration:none;font-size:1.1rem;">←</a>
+    <div class="top-bar-title" id="page-title">Game Setup</div>
+    <div class="icon-btn" id="sound-btn">🔊</div>
+  </header>
+
+  <div class="page" style="padding-top:76px;padding-bottom:120px;">
+    <div class="container">
+
+      <div style="text-align:center;margin-bottom:20px;" class="animate-fade-in">
+        <span class="badge" id="mode-badge" style="font-size:0.8rem;padding:6px 16px;">Normal Mode</span>
+      </div>
+
+      <div id="setup-content" class="animate-scale-in">
+
+        <!-- Step 1: Player Count -->
+        <div class="glass-card" style="padding:22px 20px;margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <span class="step-badge">1</span>
+            <div class="section-label" style="flex:1;margin:0;">Number of Players</div>
+          </div>
+          <div class="player-count-grid">
+            <button class="player-count-btn" data-count="2" onclick="selectPlayerCount(2)">2</button>
+            <button class="player-count-btn" data-count="3" onclick="selectPlayerCount(3)">3</button>
+            <button class="player-count-btn" data-count="4" onclick="selectPlayerCount(4)">4</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Difficulty -->
+        <div class="glass-card" style="padding:22px 20px;margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <span class="step-badge">2</span>
+            <div class="section-label" style="flex:1;margin:0;" id="step2-label">Difficulty Level</div>
+          </div>
+          <div class="difficulty-grid">
+            <button class="diff-btn" data-diff="easy"   onclick="selectDifficulty('easy')">🟢 Easy</button>
+            <button class="diff-btn" data-diff="medium" onclick="selectDifficulty('medium')">🟡 Medium</button>
+            <button class="diff-btn" data-diff="hard"   onclick="selectDifficulty('hard')">🔴 Hard</button>
+          </div>
+
+          <!-- Difficulty Info -->
+          <div id="diff-info" style="margin-top:12px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:8px;font-size:0.8rem;color:var(--text-muted);line-height:1.5;"></div>
+
+          <!-- Robot toggle (Normal mode only) -->
+          <div id="robot-toggle-row" style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding:12px 14px;background:rgba(255,215,0,0.04);border:1px solid rgba(255,215,0,0.1);border-radius:10px;">
+            <div>
+              <div style="font-weight:600;font-size:0.9rem;color:var(--text-primary);">🤖 vs Robot</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Replace one player with AI</div>
+            </div>
+            <label style="position:relative;display:inline-block;width:46px;height:26px;cursor:pointer;flex-shrink:0;">
+              <input type="checkbox" id="robot-toggle" style="opacity:0;width:0;height:0;" onchange="toggleRobot(this.checked)">
+              <span id="toggle-track" style="position:absolute;inset:0;border-radius:13px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);transition:all 0.3s;"></span>
+              <span id="toggle-thumb" style="position:absolute;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.4);top:3px;left:3px;transition:all 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.4);"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 3: X Mode Colors (X mode only) -->
+        <div class="glass-card glass-card--pink hidden" id="step-xmode-colors" style="padding:22px 20px;margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <span class="step-badge" style="background:linear-gradient(135deg,#C71585,#6B21A8);">3</span>
+            <div class="section-label" style="flex:1;margin:0;">⚡ Lucky Color Selection</div>
+          </div>
+          <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">
+            Select up to <strong style="color:var(--pink);">2 lucky colors</strong>. These colors receive favorable dice rolls based on your chosen difficulty!
+          </p>
+          <div class="color-selector" id="xmode-color-selector">
+            <button class="color-btn" data-color="red"    onclick="toggleXColor('red')"    title="Red"></button>
+            <button class="color-btn" data-color="blue"   onclick="toggleXColor('blue')"   title="Blue"></button>
+            <button class="color-btn" data-color="yellow" onclick="toggleXColor('yellow')" title="Yellow"></button>
+            <button class="color-btn" data-color="green"  onclick="toggleXColor('green')"  title="Green"></button>
+          </div>
+          <div id="xmode-color-info" style="text-align:center;font-size:0.8rem;color:var(--text-muted);margin-top:10px;min-height:20px;"></div>
+
+          <!-- Custom Dice for Easy mode -->
+          <div id="custom-dice-section" class="hidden" style="margin-top:14px;padding:14px;background:rgba(255,20,147,0.05);border:1px solid rgba(255,20,147,0.12);border-radius:10px;">
+            <div style="font-size:0.82rem;color:var(--pink);font-weight:700;margin-bottom:8px;letter-spacing:0.5px;">🎯 Custom Dice (Optional)</div>
+            <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:12px;line-height:1.5;">
+              Pin a specific dice value for your lucky colors during their turns.
+            </p>
+            <div id="custom-dice-config"></div>
+          </div>
+        </div>
+
+        <!-- Step 4: Player Names -->
+        <div class="glass-card" style="padding:22px 20px;margin-bottom:20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <span class="step-badge" id="names-step-num">3</span>
+            <div class="section-label" style="flex:1;margin:0;">Player Names <span style="font-size:0.72rem;color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></div>
+          </div>
+          <div id="name-inputs" class="stagger-children"></div>
+        </div>
+
+        <!-- Start Game -->
+        <button class="btn btn-gold btn-full btn-press" id="start-btn" onclick="startGame()" style="padding:18px;font-size:1.1rem;letter-spacing:2px;margin-bottom:12px;">
+          ▶ Start Game
+        </button>
+
+        <div id="setup-error" class="msg-error hidden">
+          <span>⚠️</span>
+          <span id="setup-error-text">Please complete setup first.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="sound-system.js"></script>
+  <script src="xmode-engine.js"></script>
+  <script>
+    const COLOR_NAMES = { red:'Red', blue:'Blue', yellow:'Yellow', green:'Green' };
+    const COLOR_ORDER = ['red','blue','yellow','green'];
+    const DIFF_INFO = {
+      easy:   '😊 Random moves. Good for beginners and casual play.',
+      medium: '🧠 Smarter decisions. Balances offense and defense.',
+      hard:   '🔥 Optimized strategy. Captures aggressively and plays to win!'
+    };
+    const XDIFF_INFO = {
+      easy:   '⚡ Easy: Lucky colors mostly roll 5 or 6. Others get low numbers.',
+      medium: '⚡ Medium: Lucky colors frequently get 4, 5, or 6. Others roll fair.',
+      hard:   '⚡ Hard: No manipulation. Everyone rolls fairly.'
+    };
+
+    let currentMode     = 'normal';
+    let selectedCount   = 4;
+    let selectedDiff    = 'medium';
+    let useRobot        = false;
+    let xPreferredColors = [];
+    let customDiceValues = {};
+
+    document.addEventListener('DOMContentLoaded', () => {
+      AUTH.requireAuth();
+      SoundSystem.init();
+      currentMode = localStorage.getItem('imranXLudoMode') || 'normal';
+
+      const sb = document.getElementById('sound-btn');
+      if (sb) {
+        sb.textContent = SoundSystem.isEnabled() ? '🔊' : '🔇';
+        sb.addEventListener('click', () => {
+          const s = !SoundSystem.isEnabled();
+          SoundSystem.setEnabled(s);
+          sb.textContent = s ? '🔊' : '🔇';
+        });
+      }
+
+      applyModeUI();
+      selectPlayerCount(4);
+      selectDifficulty('medium');
+    });
+
+    function applyModeUI() {
+      const badge    = document.getElementById('mode-badge');
+      const title    = document.getElementById('page-title');
+      const robotRow = document.getElementById('robot-toggle-row');
+      const xColors  = document.getElementById('step-xmode-colors');
+      const namesStep= document.getElementById('names-step-num');
+
+      if (currentMode === 'xmode') {
+        badge.textContent = '⚡ X Mode';
+        badge.className   = 'badge badge-x xmode-pulse';
+        title.textContent = 'X Mode Setup';
+        xColors.classList.remove('hidden');
+        namesStep.textContent = '4';
+        if (robotRow) robotRow.style.display = 'none';
+        document.getElementById('step2-label').textContent = 'X Difficulty';
+      } else {
+        badge.textContent = '🎲 Normal Mode';
+        badge.className   = 'badge badge-gold';
+        title.textContent = 'Normal Setup';
+        xColors.classList.add('hidden');
+        namesStep.textContent = '3';
+        if (robotRow) robotRow.style.display = 'flex';
+        document.getElementById('step2-label').textContent = 'Difficulty Level';
+      }
+    }
+
+    function selectPlayerCount(n) {
+      SoundSystem.playButtonClick();
+      selectedCount = n;
+      document.querySelectorAll('.player-count-btn').forEach(b => {
+        b.classList.toggle('selected', parseInt(b.dataset.count) === n);
+      });
+      updateNameInputs();
+      updateXColorAvailability();
+    }
+
+    function selectDifficulty(d) {
+      SoundSystem.playButtonClick();
+      selectedDiff = d;
+      document.querySelectorAll('.diff-btn').forEach(b => {
+        b.classList.toggle('selected', b.dataset.diff === d);
+      });
+      const infoEl = document.getElementById('diff-info');
+      if (infoEl) {
+        const info = currentMode === 'xmode' ? XDIFF_INFO[d] : DIFF_INFO[d];
+        infoEl.textContent = info || '';
+      }
+      const customSection = document.getElementById('custom-dice-section');
+      if (customSection) {
+        if (currentMode === 'xmode' && d === 'easy') {
+          customSection.classList.remove('hidden');
+          renderCustomDiceConfig();
+        } else {
+          customSection.classList.add('hidden');
+          customDiceValues = {};
+        }
+      }
+    }
+
+    function toggleRobot(checked) {
+      useRobot = checked;
+      const track = document.getElementById('toggle-track');
+      const thumb = document.getElementById('toggle-thumb');
+      if (track) track.style.background = checked ? 'rgba(255,215,0,0.3)' : 'rgba(255,255,255,0.08)';
+      if (track) track.style.borderColor = checked ? 'rgba(255,215,0,0.5)' : 'rgba(255,255,255,0.15)';
+      if (thumb) { thumb.style.left = checked ? '23px' : '3px'; thumb.style.background = checked ? '#FFD700' : 'rgba(255,255,255,0.4)'; }
+      SoundSystem.playButtonClick();
+    }
+
+    function updateNameInputs() {
+      const container = document.getElementById('name-inputs');
+      const activeColors = COLOR_ORDER.slice(0, selectedCount);
+      container.innerHTML = '';
+
+      activeColors.forEach((color, i) => {
+        const colorHex = { red:'#FF3B3B', blue:'#3B9EFF', yellow:'#FFD700', green:'#3BFF7A' }[color];
+        const div = document.createElement('div');
+        div.style.cssText = 'display:flex;align-items:center;gap:10px;margin-bottom:10px;';
+        div.innerHTML = `
+          <div style="width:16px;height:16px;border-radius:50%;background:${colorHex};flex-shrink:0;box-shadow:0 0 8px ${colorHex}66;"></div>
+          <input
+            type="text"
+            class="input-field"
+            style="flex:1;padding:10px 14px;"
+            id="name-${color}"
+            placeholder="${COLOR_NAMES[color]} Player"
+            maxlength="18"
+          >
+          ${useRobot && i > 0 && !currentMode.startsWith('x') ? `<span style="font-size:0.8rem;color:var(--text-muted);">🤖</span>` : ''}
+        `;
+        container.appendChild(div);
+        div.classList.add('animate-fade-in');
+        div.style.animationDelay = `${i * 0.06}s`;
+      });
+    }
+
+    function toggleXColor(color) {
+      SoundSystem.playButtonClick();
+      const btn = document.querySelector(`.color-btn[data-color="${color}"]`);
+      if (!btn) return;
+
+      if (btn.classList.contains('disabled')) return;
+
+      if (xPreferredColors.includes(color)) {
+        xPreferredColors = xPreferredColors.filter(c => c !== color);
+        btn.classList.remove('selected');
+        btn.style.setProperty('--glow', 'none');
+      } else {
+        if (xPreferredColors.length >= 2) {
+          showSetupError('Maximum 2 lucky colors allowed!');
+          return;
+        }
+        xPreferredColors.push(color);
+        btn.classList.add('selected');
+      }
+
+      updateXColorInfo();
+      if (currentMode === 'xmode' && selectedDiff === 'easy') renderCustomDiceConfig();
+    }
+
+    function updateXColorAvailability() {
+      const activeColors = COLOR_ORDER.slice(0, selectedCount);
+      document.querySelectorAll('.color-btn').forEach(btn => {
+        const c = btn.dataset.color;
+        if (!activeColors.includes(c)) {
+          btn.classList.add('disabled');
+          btn.classList.remove('selected');
+          xPreferredColors = xPreferredColors.filter(x => x !== c);
+        } else {
+          btn.classList.remove('disabled');
+        }
+      });
+      updateXColorInfo();
+    }
+
+    function updateXColorInfo() {
+      const el = document.getElementById('xmode-color-info');
+      if (!el) return;
+      if (xPreferredColors.length === 0) {
+        el.textContent = 'No lucky colors selected — all dice will be fair.';
+      } else {
+        el.innerHTML = `Lucky: <strong style="color:var(--gold);">${xPreferredColors.map(c => COLOR_NAMES[c]).join(' & ')}</strong>`;
+      }
+    }
+
+    function renderCustomDiceConfig() {
+      const container = document.getElementById('custom-dice-config');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const colors = xPreferredColors.length > 0 ? xPreferredColors : COLOR_ORDER.slice(0, selectedCount);
+
+      colors.forEach(color => {
+        const colorHex = { red:'#FF3B3B', blue:'#3B9EFF', yellow:'#FFD700', green:'#3BFF7A' }[color];
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'margin-bottom:12px;';
+        wrap.innerHTML = `
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <div style="width:12px;height:12px;border-radius:50%;background:${colorHex};"></div>
+            <span style="font-size:0.8rem;font-weight:600;color:${colorHex};">${COLOR_NAMES[color]}</span>
+            <span style="font-size:0.72rem;color:var(--text-muted);">— preferred dice</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;">
+            ${[1,2,3,4,5,6].map(n => `
+              <button
+                class="custom-dice-btn${customDiceValues[color] === n ? ' selected' : ''}"
+                onclick="setCustomDice('${color}',${n})"
+                data-color="${color}"
+                data-num="${n}"
+                style="font-size:0.9rem;"
+              >${n}</button>
+            `).join('')}
+          </div>
+          <button onclick="clearCustomDice('${color}')" style="margin-top:6px;font-size:0.72rem;color:rgba(255,255,255,0.35);background:none;border:none;cursor:pointer;padding:2px 4px;">✕ Clear</button>
+        `;
+        container.appendChild(wrap);
+      });
+    }
+
+    function setCustomDice(color, num) {
+      SoundSystem.playButtonClick();
+      customDiceValues[color] = num;
+      document.querySelectorAll(`.custom-dice-btn[data-color="${color}"]`).forEach(b => {
+        b.classList.toggle('selected', parseInt(b.dataset.num) === num);
+      });
+    }
+
+    function clearCustomDice(color) {
+      delete customDiceValues[color];
+      document.querySelectorAll(`.custom-dice-btn[data-color="${color}"]`).forEach(b => b.classList.remove('selected'));
+    }
+
+    function showSetupError(msg) {
+      const el  = document.getElementById('setup-error');
+      const txt = document.getElementById('setup-error-text');
+      if (el && txt) {
+        txt.textContent = msg;
+        el.classList.remove('hidden');
+        setTimeout(() => el.classList.add('hidden'), 3500);
+      }
+    }
+
+    function startGame() {
+      SoundSystem.playButtonClick();
+
+      // Validation
+      if (!selectedCount) { showSetupError('Select number of players.'); return; }
+      if (!selectedDiff)  { showSetupError('Select a difficulty.'); return; }
+
+      const activeColors = COLOR_ORDER.slice(0, selectedCount);
+      const players = activeColors.map((color, i) => {
+        const nameEl = document.getElementById(`name-${color}`);
+        const name   = nameEl ? nameEl.value.trim() : '';
+        const isRobot = currentMode === 'normal' && useRobot && i > 0;
+        return {
+          color,
+          name: name || (isRobot ? `🤖 ${COLOR_NAMES[color]}` : COLOR_NAMES[color]),
+          isRobot,
+          difficulty: selectedDiff
+        };
+      });
+
+      const config = {
+        mode: currentMode,
+        players,
+        playerCount: selectedCount,
+        difficulty: selectedDiff,
+        xModeConfig: currentMode === 'xmode' ? {
+          preferredColors: xPreferredColors,
+          difficulty: selectedDiff,
+          customValues: Object.keys(customDiceValues).length > 0 ? customDiceValues : null
+        } : null
+      };
+
+      localStorage.setItem('imranXLudoConfig', JSON.stringify(config));
+
+      // Animate and go
+      const btn = document.getElementById('start-btn');
+      if (btn) {
+        btn.textContent = '⏳ Loading…';
+        btn.disabled = true;
+      }
+
+      setTimeout(() => { window.location.href = 'game.html'; }, 400);
+    }
+  </script>
+</body>
+</html>

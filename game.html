@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Imran X Ludo — Play</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <style>
+    body { overflow: hidden; }
+
+    #game-wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      height: 100dvh;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #top-hud {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: rgba(6,6,18,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      gap: 8px;
+    }
+
+    #board-section {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      position: relative;
+    }
+
+    #game-board-wrap {
+      width: 100%;
+      max-width: min(calc(100vw - 12px), calc(100vh - 260px));
+      aspect-ratio: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(107,33,168,0.25), 0 20px 60px rgba(0,0,0,0.7);
+      animation: boardGlow 4s ease-in-out infinite;
+    }
+
+    #ludoCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    #bottom-controls {
+      flex-shrink: 0;
+      padding: 8px 12px 12px;
+      background: rgba(6,6,18,0.92);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--glass-border);
+    }
+
+    #turn-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    #dice-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    #dice-face {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, #1a0a35, #2d1060);
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', monospace;
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--gold);
+      box-shadow: 0 0 20px rgba(255,215,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    #dice-face:active:not(.disabled) { transform: scale(0.9); box-shadow: 0 0 30px rgba(255,215,0,0.5); }
+    #dice-face.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+
+    #player-panels-wrap {
+      flex: 1;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+    }
+    #player-panels-wrap::-webkit-scrollbar { display: none; }
+
+    #player-panels {
+      display: flex;
+      gap: 6px;
+      min-width: max-content;
+    }
+
+    .player-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .player-chip.active-chip {
+      border-color: currentColor;
+      background: rgba(255,255,255,0.08);
+    }
+
+    #custom-dice-area {
+      margin-top: 8px;
+      padding: 10px 12px;
+      background: rgba(255,20,147,0.05);
+      border: 1px solid rgba(255,20,147,0.1);
+      border-radius: 10px;
+    }
+
+    #xmode-badge {
+      padding: 3px 8px;
+      background: rgba(255,20,147,0.15);
+      border: 1px solid rgba(255,20,147,0.3);
+      border-radius: 6px;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 1px;
+      color: var(--pink);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-orb" style="width:200px;height:200px;background:var(--purple);top:-80px;right:-60px;filter:blur(70px);opacity:0.08;position:fixed;pointer-events:none;z-index:0;"></div>
+
+  <div id="game-wrapper">
+
+    <!-- Top HUD -->
+    <div id="top-hud">
+      <button class="icon-btn" id="back-btn" style="font-size:1rem;">←</button>
+      <div style="font-family:'Cinzel Decorative',serif;font-size:0.75rem;color:var(--gold);flex:1;text-align:center;">Imran X Ludo</div>
+      <div id="xmode-badge" class="hidden">⚡ X MODE</div>
+      <button class="icon-btn" id="sound-btn">🔊</button>
+    </div>
+
+    <!-- Board -->
+    <div id="board-section">
+      <div id="game-board-wrap">
+        <canvas id="ludoCanvas"></canvas>
+      </div>
+
+      <!-- "Tap token" hint overlay -->
+      <div id="move-hint" style="
+        display:none;
+        position:absolute;
+        bottom:12px;
+        left:50%;
+        transform:translateX(-50%);
+        background:rgba(255,215,0,0.9);
+        color:#1a0a00;
+        padding:6px 16px;
+        border-radius:20px;
+        font-family:'Rajdhani',sans-serif;
+        font-size:0.85rem;
+        font-weight:700;
+        white-space:nowrap;
+        pointer-events:none;
+        letter-spacing:0.5px;
+        box-shadow:0 4px 15px rgba(255,215,0,0.4);
+      ">👆 Tap a highlighted token</div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div id="bottom-controls">
+
+      <!-- Turn indicator row -->
+      <div id="turn-row">
+        <div style="width:10px;height:10px;border-radius:50%;flex-shrink:0;animation:pulseDot 1.2s ease-in-out infinite;" id="turn-dot" style="background:#FFD700;"></div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:0.9rem;font-weight:700;flex:1;" id="turn-name">Red's Turn</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);" id="turn-status">Roll the dice</div>
+      </div>
+
+      <!-- Player chips -->
+      <div id="player-panels-wrap" style="margin-bottom:8px;">
+        <div id="player-panels"></div>
+      </div>
+
+      <!-- Dice + Roll button row -->
+      <div id="dice-row">
+        <div id="dice-face" title="Roll Dice">?</div>
+
+        <div style="flex:1;">
+          <button
+            class="btn btn-gold btn-full btn-press"
+            id="roll-btn"
+            style="padding:14px;font-size:0.95rem;letter-spacing:1.5px;"
+            onclick="UIController.handleDiceRoll()"
+          >🎲 Roll Dice</button>
+        </div>
+      </div>
+
+      <!-- X Mode Custom Dice (shown only in X Mode Easy) -->
+      <div id="custom-dice-area" class="hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;color:var(--pink);text-transform:uppercase;">🎯 X Control</span>
+          <span style="font-size:0.72rem;color:rgba(255,255,255,0.3);">Tap to pin next roll</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:5px;" id="custom-dice-grid">
+          <!-- Filled by JS -->
+        </div>
+        <div id="custom-dice-selected" data-value="" style="display:none;"></div>
+      </div>
+
+      <!-- Ad Banner -->
+      <div id="game-ad-banner" style="margin-top:8px;"></div>
+    </div>
+  </div>
+
+  <!-- Confetti canvas -->
+  <canvas id="confetti-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:999;"></canvas>
+
+  <script src="auth.js"></script>
+  <script src="sound-system.js"></script>
+  <script src="xmode-engine.js"></script>
+  <script src="robot-ai.js"></script>
+  <script src="dice-system.js"></script>
+  <script src="game-engine.js"></script>
+  <script src="ui-controller.js"></script>
+  <script src="ads-system.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      SoundSystem.init();
+      UIController.initGameScreen();
+
+      // Roll button also responds to dice face
+      const diceFace = document.getElementById('dice-face');
+      const rollBtn  = document.getElementById('roll-btn');
+
+      // Sync roll btn enabled/disabled state
+      const observer = new MutationObserver(() => {
+        if (diceFace && rollBtn) {
+          rollBtn.disabled = diceFace.classList.contains('disabled');
+          rollBtn.style.opacity = rollBtn.disabled ? '0.4' : '1';
+        }
+      });
+      if (diceFace) observer.observe(diceFace, { attributes: true, attributeFilter: ['class'] });
+    });
+
+    // Custom dice pins (X Mode Easy)
+    function selectCustomDice(num) {
+      const hidden = document.getElementById('custom-dice-selected');
+      const btns   = document.querySelectorAll('.custom-dice-grid .custom-dice-btn');
+      btns.forEach(b => b.classList.remove('selected'));
+
+      if (hidden.dataset.value === String(num)) {
+        hidden.dataset.value = '';
+      } else {
+        hidden.dataset.value = String(num);
+        const activeBtn = document.querySelector(`.custom-dice-grid .custom-dice-btn[data-num="${num}"]`);
+        if (activeBtn) activeBtn.classList.add('selected');
+      }
+      SoundSystem.playButtonClick();
+    }
+  </script>
+</body>
+</html>

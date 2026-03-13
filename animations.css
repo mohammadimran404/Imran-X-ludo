@@ -1,0 +1,398 @@
+/* ============================================
+   IMRAN X LUDO — Animations
+   ============================================ */
+
+/* ─── Utility Keyframes ─── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.88) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ─── Page Entrance ─── */
+.animate-fade-in     { animation: fadeIn 0.5s ease forwards; }
+.animate-scale-in    { animation: fadeInScale 0.6s cubic-bezier(0.175,0.885,0.32,1.275) forwards; }
+.animate-slide-up    { animation: slideInUp 0.5s ease forwards; }
+.animate-slide-left  { animation: slideInLeft 0.4s ease forwards; }
+.animate-slide-right { animation: slideInRight 0.4s ease forwards; }
+
+/* Staggered children */
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.12s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.19s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.26s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.33s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.40s; }
+
+/* ─── Glow Pulse ─── */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(255,215,0,0.3), 0 0 30px rgba(255,215,0,0.1); }
+  50%       { box-shadow: 0 0 30px rgba(255,215,0,0.6), 0 0 60px rgba(255,215,0,0.2); }
+}
+
+@keyframes glowPulsePink {
+  0%, 100% { box-shadow: 0 0 15px rgba(255,20,147,0.3), 0 0 30px rgba(255,20,147,0.1); }
+  50%       { box-shadow: 0 0 30px rgba(255,20,147,0.6), 0 0 60px rgba(255,20,147,0.2); }
+}
+
+@keyframes glowPulsePurple {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(155,48,255,0.4)); }
+  50%       { filter: drop-shadow(0 0 18px rgba(155,48,255,0.8)); }
+}
+
+.glow-gold-pulse   { animation: glowPulse 2s ease-in-out infinite; }
+.glow-pink-pulse   { animation: glowPulsePink 2s ease-in-out infinite; }
+.glow-purple-pulse { animation: glowPulsePurple 2s ease-in-out infinite; }
+
+/* ─── Float Animations ─── */
+@keyframes floatCrown {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%       { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes floatSoft {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(30px, -20px) scale(1.05); }
+  66%       { transform: translate(-20px, 15px) scale(0.95); }
+}
+
+.float-soft { animation: floatSoft 3s ease-in-out infinite; }
+
+/* ─── Dice Roll Animation ─── */
+@keyframes diceRoll {
+  0%   { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1); }
+  20%  { transform: rotateX(180deg) rotateY(90deg) rotateZ(45deg) scale(1.1); }
+  40%  { transform: rotateX(360deg) rotateY(180deg) rotateZ(90deg) scale(0.95); }
+  60%  { transform: rotateX(540deg) rotateY(270deg) rotateZ(135deg) scale(1.05); }
+  80%  { transform: rotateX(680deg) rotateY(340deg) rotateZ(170deg) scale(0.98); }
+  100% { transform: rotateX(720deg) rotateY(360deg) rotateZ(180deg) scale(1); }
+}
+
+@keyframes diceReveal {
+  0%   { opacity: 0; transform: scale(0.5) rotateY(90deg); }
+  60%  { transform: scale(1.2) rotateY(-10deg); }
+  100% { opacity: 1; transform: scale(1) rotateY(0deg); }
+}
+
+.dice-reveal { animation: diceReveal 0.4s cubic-bezier(0.175,0.885,0.32,1.275) forwards; }
+
+/* ─── Token Animations ─── */
+@keyframes tokenEnter {
+  0%   { transform: scale(0) rotate(-180deg); opacity: 0; }
+  70%  { transform: scale(1.3) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes tokenWin {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(1.4) rotate(15deg); }
+  50%  { transform: scale(0.9) rotate(-10deg); }
+  75%  { transform: scale(1.3) rotate(8deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes tokenCapture {
+  0%   { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(1.5) rotate(180deg); opacity: 0.5; }
+  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+@keyframes tokenGlow {
+  from { filter: brightness(1) drop-shadow(0 0 4px rgba(255,255,255,0.4)); }
+  to   { filter: brightness(1.3) drop-shadow(0 0 12px rgba(255,255,255,0.8)); }
+}
+
+@keyframes tokenBounce {
+  0%   { transform: translateY(0); }
+  30%  { transform: translateY(-8px); }
+  60%  { transform: translateY(-3px); }
+  80%  { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+
+.token-enter   { animation: tokenEnter 0.5s cubic-bezier(0.175,0.885,0.32,1.275) forwards; }
+.token-win-anim { animation: tokenWin 0.6s ease forwards; }
+.token-bounce  { animation: tokenBounce 0.5s ease forwards; }
+
+/* ─── Board Glow ─── */
+@keyframes boardGlow {
+  0%   { box-shadow: 0 0 30px rgba(107,33,168,0.2), 0 25px 60px rgba(0,0,0,0.7); }
+  50%  { box-shadow: 0 0 60px rgba(255,215,0,0.15), 0 0 100px rgba(107,33,168,0.25), 0 25px 60px rgba(0,0,0,0.7); }
+  100% { box-shadow: 0 0 30px rgba(107,33,168,0.2), 0 25px 60px rgba(0,0,0,0.7); }
+}
+
+.board-glow { animation: boardGlow 4s ease-in-out infinite; }
+
+/* ─── Shake (Wrong Password) ─── */
+@keyframes shakeX {
+  0%, 100% { transform: translateX(0); }
+  15%  { transform: translateX(-8px); }
+  30%  { transform: translateX(8px); }
+  45%  { transform: translateX(-6px); }
+  60%  { transform: translateX(6px); }
+  75%  { transform: translateX(-4px); }
+  90%  { transform: translateX(4px); }
+}
+
+@keyframes shakeCard {
+  0%, 100% { transform: translateX(0) scale(1); }
+  15%  { transform: translateX(-10px) scale(0.99); }
+  30%  { transform: translateX(10px) scale(0.99); }
+  45%  { transform: translateX(-7px) scale(1); }
+  60%  { transform: translateX(7px) scale(1); }
+  75%  { transform: translateX(-4px); }
+  90%  { transform: translateX(4px); }
+}
+
+.shake      { animation: shakeX 0.4s ease; }
+.shake-card { animation: shakeCard 0.5s ease; }
+
+/* ─── Win Celebration ─── */
+@keyframes trophyBounce {
+  0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+  60%  { transform: scale(1.2) rotate(5deg); opacity: 1; }
+  80%  { transform: scale(0.95) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes trophyGlow {
+  from { filter: drop-shadow(0 0 10px rgba(255,215,0,0.5)); }
+  to   { filter: drop-shadow(0 0 30px rgba(255,215,0,1)) drop-shadow(0 0 50px rgba(255,215,0,0.5)); }
+}
+
+@keyframes winRing {
+  0%   { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes celebrationBurst {
+  0%   { transform: scale(0) rotate(0deg); opacity: 1; }
+  100% { transform: scale(3) rotate(360deg); opacity: 0; }
+}
+
+/* ─── Win Text Gradient Shift ─── */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+/* ─── Particle Float ─── */
+@keyframes floatParticle {
+  0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.7; }
+  100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+}
+
+/* ─── Spinning Loader ─── */
+@keyframes spinRing {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Neon Flicker ─── */
+@keyframes neonFlicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+.neon-flicker { animation: neonFlicker 4s ease-in-out infinite; }
+
+/* ─── Pulsing Dot ─── */
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.4); opacity: 0.7; }
+}
+
+/* ─── Button Ripple ─── */
+@keyframes ripple {
+  from { transform: scale(0); opacity: 0.5; }
+  to   { transform: scale(4); opacity: 0; }
+}
+
+.btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  animation: ripple 0.6s ease-out forwards;
+  transform-origin: center;
+  margin-left: -10px;
+  margin-top: -10px;
+}
+
+/* ─── Board Highlight (current player) ─── */
+@keyframes boardBorderPulse {
+  0%, 100% { border-color: rgba(255,215,0,0.3); box-shadow: 0 0 20px rgba(255,215,0,0.1); }
+  50%       { border-color: rgba(255,215,0,0.7); box-shadow: 0 0 40px rgba(255,215,0,0.3); }
+}
+
+/* ─── X Mode Badge Pulse ─── */
+@keyframes xModePulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(255,20,147,0.4), 0 0 20px rgba(255,20,147,0.1);
+    border-color: rgba(255,20,147,0.4);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255,20,147,0.7), 0 0 35px rgba(255,20,147,0.25);
+    border-color: rgba(255,20,147,0.8);
+  }
+}
+
+.xmode-pulse { animation: xModePulse 1.8s ease-in-out infinite; }
+
+/* ─── Countdown Timer ─── */
+@keyframes countdownTick {
+  0%   { transform: scale(1.2); color: #FF3B3B; }
+  100% { transform: scale(1);   color: #FF6B6B; }
+}
+
+.countdown-tick { animation: countdownTick 0.3s ease forwards; }
+
+/* ─── Home Screen Logo ─── */
+@keyframes logoReveal {
+  0%   { opacity: 0; transform: translateY(-30px) scale(0.9); filter: blur(8px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+.logo-reveal { animation: logoReveal 0.8s cubic-bezier(0.175,0.885,0.32,1.275) forwards; }
+
+/* ─── Sparkle Effect ─── */
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50%       { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+
+.sparkle {
+  display: inline-block;
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+.sparkle:nth-child(2) { animation-delay: 0.5s; }
+.sparkle:nth-child(3) { animation-delay: 1s; }
+
+/* ─── Staggered Fade-In with Blur ─── */
+@keyframes blurFadeIn {
+  from { opacity: 0; filter: blur(6px); transform: translateY(8px); }
+  to   { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+
+.blur-fade-in { animation: blurFadeIn 0.6s ease forwards; }
+
+/* ─── Token Selected Ring ─── */
+@keyframes selectedRing {
+  0%   { box-shadow: 0 0 0 0 rgba(255,255,255,0.6); }
+  70%  { box-shadow: 0 0 0 8px rgba(255,255,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+}
+
+/* ─── Step Indicator ─── */
+.step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple-mid), var(--dark-pink));
+  font-family: 'Orbitron', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(107,33,168,0.4);
+}
+
+/* ─── Game Over Banner ─── */
+@keyframes gameOverSlide {
+  from { transform: translateX(-50%) translateY(-100px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+/* ─── Button Press ─── */
+.btn-press { transition: transform 0.1s ease; }
+.btn-press:active { transform: scale(0.95) !important; }
+
+/* ─── Dice Custom Number ─── */
+@keyframes numberSelect {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.number-select { animation: numberSelect 0.25s ease; }
+
+/* ─── Popunder overlay ─── */
+.popunder-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.popunder-box {
+  animation: fadeInScale 0.4s cubic-bezier(0.175,0.885,0.32,1.275) forwards;
+}
+
+/* ─── Scroll fade-in for content pages ─── */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.reveal-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

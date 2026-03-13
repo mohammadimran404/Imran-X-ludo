@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Imran X Ludo — Winner!</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+  <style>
+    .win-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 3px solid rgba(255,215,0,0.4);
+      animation: winRing 2s ease-out infinite;
+    }
+    .win-ring:nth-child(2) { animation-delay: 0.5s; border-color: rgba(255,20,147,0.3); }
+    .win-ring:nth-child(3) { animation-delay: 1s;   border-color: rgba(155,48,255,0.3); }
+
+    .confetti-piece {
+      position: fixed;
+      pointer-events: none;
+      font-size: 1.2rem;
+      animation: floatParticle linear infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-orb glow-orb-1" style="opacity:0.2;"></div>
+  <div class="glow-orb glow-orb-2" style="opacity:0.18;"></div>
+  <div class="glow-orb glow-orb-3" style="opacity:0.12;"></div>
+
+  <canvas id="confetti-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:0;"></canvas>
+
+  <div class="page" style="z-index:1;position:relative;">
+    <div class="container">
+
+      <div class="glass-card glass-card--gold animate-scale-in" style="padding:40px 28px;text-align:center;position:relative;overflow:hidden;">
+
+        <!-- Glow rings -->
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+          <div class="win-ring" style="width:200px;height:200px;"></div>
+          <div class="win-ring" style="width:280px;height:280px;"></div>
+          <div class="win-ring" style="width:360px;height:360px;"></div>
+        </div>
+
+        <!-- Trophy -->
+        <div style="position:relative;z-index:1;">
+          <span id="win-trophy" style="font-size:5.5rem;display:block;margin-bottom:8px;animation:trophyBounce 0.8s cubic-bezier(0.175,0.885,0.32,1.275) forwards,trophyGlow 1.5s 0.8s ease-in-out infinite alternate;">🏆</span>
+
+          <div style="font-family:'Orbitron',monospace;font-size:0.7rem;letter-spacing:4px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;animation:fadeIn 0.6s 0.3s ease both;">WINNER</div>
+
+          <h1 style="
+            font-family:'Cinzel Decorative',serif;
+            font-size:clamp(1.5rem,6vw,2.2rem);
+            font-weight:900;
+            background:linear-gradient(135deg,var(--gold),var(--mustard),var(--pink),var(--purple));
+            background-size:200% 200%;
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            animation:gradientShift 2.5s ease infinite,fadeIn 0.6s 0.5s ease both;
+            margin-bottom:8px;
+          " id="win-title">Victory!</h1>
+
+          <div id="winner-color-dot" style="
+            width:16px;height:16px;border-radius:50%;
+            margin:0 auto 12px;
+            box-shadow:0 0 15px currentColor;
+            animation:pulseDot 1s ease-in-out infinite;
+          "></div>
+
+          <div id="win-player-name" style="
+            font-family:'Rajdhani',sans-serif;
+            font-size:1.6rem;
+            font-weight:700;
+            letter-spacing:3px;
+            text-transform:uppercase;
+            margin-bottom:6px;
+            animation:fadeIn 0.6s 0.7s ease both;
+          ">Red Player</div>
+
+          <div id="win-subtitle" style="
+            font-size:0.9rem;
+            color:var(--text-muted);
+            margin-bottom:28px;
+            animation:fadeIn 0.6s 0.9s ease both;
+          ">conquered the board!</div>
+
+          <hr class="neon-divider">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0;animation:fadeIn 0.6s 1s ease both;">
+            <button class="btn btn-gold btn-full btn-press" onclick="playAgain()">
+              🔄 Play Again
+            </button>
+            <button class="btn btn-purple btn-full btn-press" onclick="goHome()">
+              🏠 Home
+            </button>
+          </div>
+
+          <button class="btn btn-ghost btn-full" onclick="shareWin()" style="font-size:0.85rem;">
+            📤 Share Result
+          </button>
+        </div>
+      </div>
+
+      <!-- Sparkle decorations -->
+      <div style="display:flex;justify-content:center;gap:16px;margin-top:20px;animation:fadeIn 0.8s 1.2s ease both;">
+        <span class="sparkle" style="font-size:1.5rem;">✨</span>
+        <span class="sparkle" style="font-size:1.8rem;">⭐</span>
+        <span class="sparkle" style="font-size:1.5rem;">✨</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="sound-system.js"></script>
+  <script src="game-engine.js"></script>
+
+  <script>
+    // Winner display
+    const COLOR_HEX = {
+      red:    '#FF3B3B',
+      blue:   '#3B9EFF',
+      yellow: '#FFD700',
+      green:  '#3BFF7A'
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      AUTH.requireAuth();
+      SoundSystem.init();
+
+      const winnerData = JSON.parse(localStorage.getItem('imranXLudoWinner') || 'null');
+      if (!winnerData) {
+        window.location.href = 'menu.html';
+        return;
+      }
+
+      const { color, name } = winnerData;
+      const hex = COLOR_HEX[color] || '#FFD700';
+
+      // Update UI
+      const nameEl = document.getElementById('win-player-name');
+      const dotEl  = document.getElementById('winner-color-dot');
+      const titleEl= document.getElementById('win-title');
+
+      if (nameEl) nameEl.textContent = name;
+      if (dotEl)  { dotEl.style.background = hex; dotEl.style.color = hex; }
+      if (titleEl) titleEl.style.setProperty('color', hex);
+
+      // Update trophy based on color
+      const trophyEl = document.getElementById('win-trophy');
+      const trophies = { red:'🏆', blue:'🎖️', yellow:'👑', green:'🌟' };
+      if (trophyEl) trophyEl.textContent = trophies[color] || '🏆';
+
+      // Play win sound
+      SoundSystem.playWin();
+
+      // Launch confetti
+      launchConfetti(hex);
+    });
+
+    function launchConfetti(winColor) {
+      const canvas = document.getElementById('confetti-canvas');
+      if (!canvas) return;
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const ctx = canvas.getContext('2d');
+
+      const pieces = [];
+      const colors = [winColor, '#FFD700', '#FF1493', '#9B30FF', '#FFFFFF', '#FFDB58'];
+      const symbols = ['●', '★', '♦', '▲', '✦', '◆'];
+
+      for (let i = 0; i < 100; i++) {
+        pieces.push({
+          x: Math.random() * canvas.width,
+          y: -20 - Math.random() * 100,
+          vx: (Math.random() - 0.5) * 4,
+          vy: 2 + Math.random() * 4,
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 8,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          symbol: symbols[Math.floor(Math.random() * symbols.length)],
+          size: 10 + Math.random() * 14,
+          alpha: 0.8 + Math.random() * 0.2
+        });
+      }
+
+      let frame = 0;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          ctx.save();
+          ctx.globalAlpha = p.alpha;
+          ctx.fillStyle = p.color;
+          ctx.font = `${p.size}px sans-serif`;
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rotation * Math.PI / 180);
+          ctx.fillText(p.symbol, 0, 0);
+          ctx.restore();
+
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.08; // gravity
+          p.rotation += p.rotSpeed;
+          p.alpha -= 0.004;
+        });
+
+        frame++;
+        if (frame < 240) requestAnimationFrame(draw);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    function playAgain() {
+      SoundSystem.playButtonClick();
+      const config = JSON.parse(localStorage.getItem('imranXLudoConfig') || 'null');
+      if (config) {
+        // Keep same config
+        localStorage.removeItem('imranXLudoWinner');
+        GameEngine.clearState();
+        window.location.href = 'game.html';
+      } else {
+        window.location.href = 'menu.html';
+      }
+    }
+
+    function goHome() {
+      SoundSystem.playButtonClick();
+      localStorage.removeItem('imranXLudoWinner');
+      GameEngine.clearState();
+      window.location.href = 'menu.html';
+    }
+
+    function shareWin() {
+      SoundSystem.playButtonClick();
+      const winnerData = JSON.parse(localStorage.getItem('imranXLudoWinner') || '{}');
+      const text = `🏆 ${winnerData.name || 'Someone'} just won Imran X Ludo! Can you beat them? 👑`;
+      if (navigator.share) {
+        navigator.share({ title: 'Imran X Ludo', text, url: window.location.origin }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(text).then(() => alert('Result copied to clipboard!')).catch(() => alert(text));
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Imran X Ludo — Menu</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="animations.css">
+</head>
+<body>
+  <!-- Glow Orbs -->
+  <div class="glow-orb glow-orb-1"></div>
+  <div class="glow-orb glow-orb-2"></div>
+  <div class="glow-orb glow-orb-3"></div>
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="top-bar-title">👑 Imran X Ludo</div>
+    <div style="display:flex;gap:8px;">
+      <button class="icon-btn" id="sound-toggle" title="Toggle Sound">🔊</button>
+      <button class="icon-btn" onclick="AUTH.logout();window.location.href='index.html';" title="Logout">🔓</button>
+    </div>
+  </header>
+
+  <div class="page" style="padding-top:80px;padding-bottom:100px;">
+    <div class="container">
+
+      <!-- Logo -->
+      <div class="page-header logo-reveal" style="margin-bottom:24px;">
+        <span class="crown-icon" style="font-size:3.5rem;">👑</span>
+        <h1 class="logo-title">Imran X Ludo</h1>
+        <p class="logo-subtitle">Choose Your Game Mode</p>
+      </div>
+
+      <!-- Mode Cards -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;" class="stagger-children">
+
+        <!-- Normal Mode -->
+        <div class="mode-card mode-card--normal glass-card animate-fade-in" onclick="selectMode('normal')" id="card-normal">
+          <span class="mode-card-icon" style="color:var(--gold);">🎲</span>
+          <div class="mode-card-title" style="color:var(--gold);">Normal</div>
+          <div class="mode-card-desc">Classic Ludo. Play fair against friends or robots.</div>
+          <div style="margin-top:10px;">
+            <span class="badge badge-gold" style="font-size:0.65rem;">Fair Play</span>
+          </div>
+        </div>
+
+        <!-- X Mode -->
+        <div class="mode-card mode-card--x glass-card animate-fade-in" onclick="selectMode('xmode')" id="card-xmode">
+          <span class="mode-card-icon" style="color:var(--pink);font-size:2.5rem;">⚡</span>
+          <div class="mode-card-title" style="color:var(--pink);">X Mode</div>
+          <div class="mode-card-desc">Special rules. Stack the odds in your favor!</div>
+          <div style="margin-top:10px;">
+            <span class="badge badge-x xmode-pulse" style="font-size:0.65rem;">X Mode</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats / Info -->
+      <div class="glass-card animate-slide-up" style="padding:16px;margin-bottom:20px;">
+        <div style="display:flex;gap:0;justify-content:space-around;text-align:center;">
+          <div>
+            <div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:var(--gold);">4</div>
+            <div style="font-size:0.72rem;color:var(--text-muted);letter-spacing:0.5px;">Players</div>
+          </div>
+          <div style="width:1px;background:var(--glass-border);margin:4px 0;"></div>
+          <div>
+            <div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:var(--pink);">2</div>
+            <div style="font-size:0.72rem;color:var(--text-muted);letter-spacing:0.5px;">Modes</div>
+          </div>
+          <div style="width:1px;background:var(--glass-border);margin:4px 0;"></div>
+          <div>
+            <div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:var(--purple);">3</div>
+            <div style="font-size:0.72rem;color:var(--text-muted);letter-spacing:0.5px;">Difficulty</div>
+          </div>
+          <div style="width:1px;background:var(--glass-border);margin:4px 0;"></div>
+          <div>
+            <div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:var(--mustard);">∞</div>
+            <div style="font-size:0.72rem;color:var(--text-muted);letter-spacing:0.5px;">Fun</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nav Links -->
+      <div class="glass-card animate-slide-up" style="padding:14px 18px;margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-around;">
+          <a href="terms.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">
+            <span style="font-size:1.2rem;">📜</span>
+            <span>Terms</span>
+          </a>
+          <a href="contact.html" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">
+            <span style="font-size:1.2rem;">📬</span>
+            <span>Contact</span>
+          </a>
+          <a href="#" onclick="AUTH.logout();window.location.href='index.html';return false;" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color 0.2s;" onmouseover="this.style.color='var(--pink)'" onmouseout="this.style.color='var(--text-muted)'">
+            <span style="font-size:1.2rem;">🔓</span>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Banner Ad -->
+      <div id="home-ad-banner"></div>
+
+    </div>
+  </div>
+
+  <!-- Particles -->
+  <script>
+    const PARTICLE_CHARS = ['♟','🎲','⭐','👑','⚡','💎'];
+    for (let i = 0; i < 10; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = PARTICLE_CHARS[Math.floor(Math.random() * PARTICLE_CHARS.length)];
+      p.style.cssText = `left:${Math.random()*100}%;animation-duration:${10+Math.random()*14}s;animation-delay:${-Math.random()*18}s;font-size:${0.9+Math.random()*0.7}rem;color:rgba(255,215,0,${0.04+Math.random()*0.1});`;
+      document.body.appendChild(p);
+    }
+  </script>
+
+  <script src="auth.js"></script>
+  <script src="sound-system.js"></script>
+  <script src="ads-system.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      AUTH.requireAuth();
+      SoundSystem.init();
+
+      // Sound toggle
+      const soundBtn = document.getElementById('sound-toggle');
+      if (soundBtn) {
+        soundBtn.textContent = SoundSystem.isEnabled() ? '🔊' : '🔇';
+        soundBtn.classList.toggle('active', SoundSystem.isEnabled());
+        soundBtn.addEventListener('click', () => {
+          const s = !SoundSystem.isEnabled();
+          SoundSystem.setEnabled(s);
+          soundBtn.textContent = s ? '🔊' : '🔇';
+          soundBtn.classList.toggle('active', s);
+        });
+      }
+
+      // Home banner ad
+      AdsSystem.showHomeBannerAd('home-ad-banner');
+    });
+
+    function selectMode(mode) {
+      SoundSystem.playButtonClick();
+      localStorage.setItem('imranXLudoMode', mode);
+
+      // Animate card
+      const cardId = mode === 'normal' ? 'card-normal' : 'card-xmode';
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.style.transform = 'scale(0.97)';
+        card.style.transition = 'transform 0.15s ease';
+        setTimeout(() => {
+          card.style.transform = '';
+          window.location.href = 'setup.html';
+        }, 150);
+      } else {
+        window.location.href = 'setup.html';
+      }
+    }
+  </script>
+</body>
+</html>
